@@ -1,0 +1,8 @@
+"metric","value"
+"shared_genes_tested",14128
+"spearman_logFC",0.640996693650433
+"shared_sig_DEGs",15
+"shared_up_DEGs",15
+"shared_down_DEGs",0
+"top100_overlap",40
+"hallmark_NES_spearman",0.8153181272509

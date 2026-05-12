@@ -1,0 +1,3 @@
+"study","geo_total","curated_hg38_total","retained_labelled","groups","sites","unique_patients","repeated_patients","genes_before","genes_after_filter","baseline_deg","baseline_up","baseline_down","adjusted_deg","adjusted_method"
+"GSE79362",355,355,355," LTBI  PTB   245  110 "," South Africa           355 ",144,105,60642,16555,30,29,1,9,"limma-voom adjusted for timepoint with PatientID block, correlation=0.306"
+"GSE94438",434,434,428," Control     PTB      327     101 ","     Ethiopia South Africa   The Gambia            45          210          173 ",334,79,40272,15002,43,43,0,41,"edgeR adjusted for site + sex + age"

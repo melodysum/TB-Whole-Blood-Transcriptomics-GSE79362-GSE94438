@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+__MACOSX/
+._*
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+*.Rproj
+
+# Large files (store separately if needed)
+
+# Temp
+*.tmp
+*.log
