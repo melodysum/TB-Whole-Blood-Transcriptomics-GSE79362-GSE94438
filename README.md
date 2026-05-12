@@ -11,22 +11,23 @@ Analysis of two prospective whole-blood RNA-seq cohorts from `curatedTBData`, co
 
 ## Key Results
 
-- **GSE79362 baseline DEGs:** 30 (FDR < 0.05, |logFC| > 1); 29 up in PTB  
-- **GSE79362 adjusted DEGs:** 9 (after correcting for timepoint + repeated measures)  
-- **GSE94438 baseline DEGs:** 43; all up in PTB/progressors  
-- **GSE94438 adjusted DEGs:** 41 (after adjusting for site, sex, age)  
+- **GSE79362 baseline DEGs:** 30 (FDR < 0.05, |logFC| > 1); 29 up in PTB, 1 down
+- **GSE79362 adjusted DEGs:** 9 after adjusting for timepoint and patient-level repeated measures using limma-voom duplicateCorrelation
+- **GSE94438 baseline DEGs:** 43 (FDR < 0.05, |logFC| > 1); all 43 up in PTB/progressors
+- **GSE94438 adjusted DEGs:** 41 after adjustment for site/country, sex and age
 
 | Signature | GSE79362 AUC | GSE94438 AUC |
 |-----------|-------------|-------------|
-| Zak 16-gene | 0.765 | 0.686 |
+| Zak16 | 0.765 | 0.686 |
 | RISK4 | 0.759 | 0.687 |
-| 11-gene recurring | 0.771 | 0.694 |
+| Eleven_gene | 0.771 | 0.694 |
 
-Cross-dataset logFC Spearman r = 0.641 · Hallmark NES Spearman r = 0.815
+Cross-dataset logFC Spearman r = 0.641 · Hallmark NES Spearman r = 0.815  
+Shared tested genes = 14,128 · Shared strict DEGs = 15 · Top-100 DEG overlap = 40
 
 ## Biological Conclusion
 
-Across both cohorts, active or progressive TB is marked by a reproducible **interferon–inflammatory–complement–myeloid program** in whole blood, reflecting both immune activation and shifts in circulating leukocyte composition.
+Across both whole-blood RNA-seq cohorts, active or progressive TB is marked by a reproducible **interferon–inflammatory–complement–myeloid programme**. This signal distinguishes active disease or progression from LTBI/exposed non-progression, but it likely reflects both immune activation and shifts in circulating leukocyte composition.
 
 ## Repository Structure
 
@@ -58,3 +59,11 @@ source("code/tb_analysis.R")
 - GSE79362 contains repeated longitudinal samples; repeated-measures correction substantially reduces the strict DEG count.
 - GSE94438 spans three African sites; site is a required covariate.
 - The two datasets use different label definitions and should not be treated as identical biological contrasts.
+
+## Gene Set Databases Used in GSEA
+
+| Role | Gene Set Database | Notes |
+|------|-------------------|-------|
+| **Primary database** | **MSigDB Hallmark gene sets** | Main results; used for cross-dataset pathway-level comparison. Only 50 gene sets with low redundancy — well suited for summarising the core TB immune programmes: IFN, inflammation, complement, TNF/NF-κB, and IL6/JAK/STAT3. |
+| **Supporting database 1** | **Reactome pathways** | Auxiliary pathway-level validation; confirms whether the immune/inflammatory themes seen in Hallmark are reproducible in a more granular pathway database. |
+| **Supporting database 2** | **GO Biological Process (GO BP)** | Auxiliary biological-process-level validation; checks whether broader immune and inflammatory biological processes are consistent across datasets. |
