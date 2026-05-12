@@ -67,3 +67,37 @@ source("code/tb_analysis.R")
 | **Primary database** | **MSigDB Hallmark gene sets** | Main results; used for cross-dataset pathway-level comparison. Only 50 gene sets with low redundancy — well suited for summarising the core TB immune programmes: IFN, inflammation, complement, TNF/NF-κB, and IL6/JAK/STAT3. |
 | **Supporting database 1** | **Reactome pathways** | Auxiliary pathway-level validation; confirms whether the immune/inflammatory themes seen in Hallmark are reproducible in a more granular pathway database. |
 | **Supporting database 2** | **GO Biological Process (GO BP)** | Auxiliary biological-process-level validation; checks whether broader immune and inflammatory biological processes are consistent across datasets. |
+
+## Dataset Comparison: GSE79362 vs GSE94438
+
+| Dimension | GSE79362 | GSE94438 | Notes |
+|-----------|----------|----------|-------|
+| Dataset role | Active TB vs latent TB infection | TB patients / progressors vs exposed household contacts / controls | Same topic, different control group definitions |
+| Core biological question | In an already-infected background, what signals distinguish **latent TB** from **active pulmonary TB**? | In an exposed population, what signals associate with **TB progression / active disease**? | GSE79362 = disease-state comparison; GSE94438 = progression/exposure cohort |
+| Primary contrast | **PTB vs LTBI** | **PTB / progressors vs household contacts / controls** | Cannot treat both as simply "patients vs healthy" |
+| Geographic origin | South Africa | Ethiopia, South Africa, The Gambia | GSE94438 has greater geographic heterogeneity |
+| Tissue | Whole blood | Whole blood | Identical — key reason cross-dataset comparison is valid |
+| Sequencing platform | Illumina RNA-seq | Illumina RNA-seq | Consistent platform — another reason for comparability |
+| Data type | Bulk whole-blood RNA-seq | Bulk whole-blood RNA-seq | Neither is single-cell; cell-type attribution requires deconvolution |
+| Sample size | 355 labelled samples | 428 labelled samples (434 total; 6 excluded for missing TBStatus) | — |
+| Control group nature | LTBI: infected but not progressed to active TB | Household contacts: TB-exposed but not necessarily truly naive/uninfected | GSE94438 controls are not strict "healthy naive" individuals |
+| Cohort structure | Single country, relatively homogeneous | Multi-country, multi-site, higher heterogeneity | Site/country effect must be handled carefully in GSE94438 |
+| Repeated measures | Marked repeated longitudinal measurements | Some longitudinal structure, but main confounder is site/country | GSE79362 most needs PatientID blocking |
+| Main confounders | Timepoint, PatientID repeated measures | Site/country, sex, age | The two datasets cannot share an identical adjusted model |
+| Adjustment method | limma-voom + duplicateCorrelation for PatientID block / repeated measures | edgeR model adjusted for site/country, sex, age | — |
+| Baseline DEGs | 30 strict DEGs | 43 strict DEGs | — |
+| Adjusted DEGs | 9 strict DEGs | 41 strict DEGs | GSE79362 drops sharply; GSE94438 retains most signal after adjustment |
+| Effect of adjustment | 30 → 9 after adjustment | 43 → 41 after adjustment | GSE79362 is highly sensitive to repeated measures; GSE94438 disease signal is not driven by site/sex/age |
+| DEG direction | Baseline: 29 up, 1 down; fewer after adjustment | Baseline: 43 up; adjusted: 41 up | Both datasets are dominated by upregulated signal in active/progressive TB |
+| Single-gene stability | Strongly affected by repeated measures | Affected by geographic heterogeneity, but largely retained after adjustment | Individual DEGs are not the most stable layer |
+| GSEA / pathway results | IFN, inflammation, complement, TNF/NF-κB, IL6/JAK/STAT3 enriched | Same: IFN, inflammation, complement, TNF/NF-κB, IL6/JAK/STAT3 enriched | Pathway-level results are more consistent than DEG lists |
+| Pathway consistency | Highly consistent with GSE94438 | Highly consistent with GSE79362 | Core rationale for analysing both datasets together |
+| Signature AUC | Zak16, RISK4, Eleven_gene: ~0.76–0.77 | Zak16, RISK4, Eleven_gene: ~0.68–0.69 | Signatures perform better in GSE79362 |
+| Why higher AUC in GSE79362 | PTB vs LTBI is a more direct biological contrast | Exposed household contacts may already have TB-related immune priming | Lower AUC in GSE94438 is biologically expected |
+| Best suited for | Disease-specific whole-blood signal: active TB vs latent infection | TB risk / disease-associated signal in an exposure/progression context | Complementary, not interchangeable |
+| Main strength | Clean contrast, single-country cohort, direct PTB vs LTBI biological interpretation | Larger sample size, multi-country, closer to real-world exposure/progression setting | One is cleaner; the other is more realistic |
+| Main limitation | Repeated measures have large impact; ignoring them inflates DEG counts | Strong site/country/population stratification; controls are not naive uninfected individuals | Both have limitations that must be stated |
+| Reporting role | Primary analysis: "active disease vs latent infection" | Cross-cohort validation or secondary analysis: "progression-exposure comparison" | GSE79362 as primary; GSE94438 as validation/complement |
+| Interpretation risk | Without PatientID / timepoint adjustment, DEGs may be inflated | Without site/country adjustment, geographic differences may be mistaken for TB biology | Neither dataset should be run with a simple `~ TBStatus` model only |
+| Biological conclusion | Active PTB vs LTBI shows a stronger interferon–inflammatory–myeloid signal | Progressive/active TB vs exposed controls shows a similar immune programme | Together they support a conserved whole-blood TB immune programme |
+| Value for downstream analysis | Defines active TB disease-associated markers | Tests whether those markers replicate in an exposure/progression cohort | Both together are more convincing than either alone |
